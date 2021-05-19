@@ -22,6 +22,4 @@ export class CreateProductDto {
 
     @ApiProperty()
     readonly status: string;
-    
-    
 }
