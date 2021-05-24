@@ -2,18 +2,22 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
+require('dotenv').config();
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const port = process.env.PORT;
+
   const options = new DocumentBuilder()
-  .setTitle('Products example')
-  .setDescription('The Products API description')
+  .setTitle('Pets example')
+  .setDescription('The Pets API description')
   .setVersion('1.0')
-  .addTag('products')
+  .addTag('Pets')
   .build();
 
 const document = SwaggerModule.createDocument(app, options);
 
 SwaggerModule.setup('api', app, document);
-  await app.listen(3000);
+  await app.listen(port);
 }
 bootstrap();
