@@ -3,14 +3,14 @@ import { RedisService } from './redis/redis.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly _redisService: RedisService) {}
+  constructor(private redisService: RedisService) {}
 
-  @Get(':idKey')
-  async getRedis(@Param('idKey', ParseIntPipe) idKey: number, @Response() response){
-    const dataRedis: any = await this._redisService.getRedis(idKey);
+  @Get(':Pets')
+  async getDataRedis(@Param('Pets', ParseIntPipe) Pets: number, @Response() response){
+    const dataRedis: any = await this.redisService.getDataRedis(Pets);
 
     if (dataRedis === null){
-      return response.status(HttpStatus.NOT_FOUND).json(`${response.statusCode} - Data Not Found: Key => ${idKey} `);
+      return response.status(HttpStatus.NOT_FOUND).json(`${response.statusCode} - Data Not Found: Key => ${Pets} `);
     } else {
         return response.status(HttpStatus.OK).json(dataRedis);
     }
