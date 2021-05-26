@@ -9,8 +9,8 @@ redisClient.on("error", function(error: string){
 
 @Injectable()
 export class RedisService {
-    async getDataRedis(Key: number){
-        const dataRedis: string = await redisClient.get(Key);
+    async getDataRedis(key: any){
+        const dataRedis: string = await redisClient.get(key);
         return JSON.parse(dataRedis);
     };
 };
