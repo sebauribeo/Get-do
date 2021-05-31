@@ -1,4 +1,3 @@
-import { ApiProperty } from "@nestjs/swagger";
 import {  IsEnum, IsNotEmpty, IsNumber, IsString } from "class-validator";
 
 export class ValidationDTO{
@@ -14,26 +13,29 @@ export class ValidationDTO{
         this.status = data.status
     };
     
-    @ApiProperty()  
+    @IsNotEmpty()
+    @IsNumber()
     id: number;
-    
-    @ApiProperty()  
+
+    @IsNotEmpty()
+    @IsString()
     name: string;
-    
-    @ApiProperty()  
+
+    @IsNotEmpty()
+    @IsString()
     description: string;
     
-    @ApiProperty()      
+    @IsNotEmpty()
+    @IsNumber()
     price: number;
-    
-    @ApiProperty()  
+
+    @IsNotEmpty()
+    @IsString()
     commercialName: string;
-    
-    @ApiProperty()  
+
     @IsString({each: true})
     photoUrls: Array<string>;
-    
-    @ApiProperty()  
+
     @IsEnum(["available", "pending", "sold"],{
         message: 'Status is not valid [available, pending, sold]'
     })

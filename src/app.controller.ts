@@ -1,6 +1,9 @@
 import { Controller, Get, HttpStatus, Param, ParseIntPipe, Response } from "@nestjs/common";
+import { validate } from "class-validator";
+import { ValidationDTO } from "./dto/validation.dto";
 import { LoggerService } from "./services/logger/logger.service";
 import { RedisService } from "./services/redis/redis.service";
+
 
 @Controller()
 export class AppController {
@@ -12,13 +15,7 @@ export class AppController {
   @Get(':Pets')
   async getDataRedis(@Param('Pets', ParseIntPipe) Pets: number, @Response() response){
     const dataRedis: any = await this.redisService.getDataRedis(Pets);
-
-    if (dataRedis === null){
-      this.loggerService.customError({}, {message: 'Data Not Found!'});
-      return response.status(HttpStatus.NOT_FOUND).json(`${response.statusCode} - Data Not Found: Key => ${Pets} `);
-    } else {
       this.loggerService.customInfo({}, { message: 'Data obtained from Redis Cache!', value: dataRedis})
       return response.status(HttpStatus.OK).json(dataRedis);
-    };
   };
 };
