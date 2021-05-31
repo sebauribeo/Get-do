@@ -17,8 +17,8 @@ export class AppController {
       this.loggerService.customError({}, {message: 'Data Not Found!'});
       return response.status(HttpStatus.NOT_FOUND).json(`${response.statusCode} - Data Not Found: Key => ${Pets} `);
     } else {
-      this.loggerService.customInfo({}, { message: 'Data obtained'})
-        return response.status(HttpStatus.OK).json(dataRedis);
+      this.loggerService.customInfo({}, { message: 'Data obtained from Redis Cache!', value: dataRedis})
+      return response.status(HttpStatus.OK).json(dataRedis);
     };
   };
 };
