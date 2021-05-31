@@ -14,8 +14,7 @@ async function bootstrap() {
   .setTitle('Pets example')
   .setDescription('The Pets API description')
   .setVersion('1.0')
-  .addTag('Pets')
-  .build();
+  .build()
 
 const document = SwaggerModule.createDocument(app, options);
 
