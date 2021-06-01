@@ -17,15 +17,15 @@ export class RedisService {
 
     async getDataRedis(key: any){
         const dataRedis: any = await redisClient.get(key);
-        this.loggerService.customInfo({}, { 'Data from the server': dataRedis });
+        this.loggerService.customInfo({}, { 'Data from the server...': JSON.parse(dataRedis)});
         const validationResult: ValidationDTO = dataRedis; 
         const result = new ValidationDTO(validationResult);
         const validation = await validate(result);
         if (key !== null){
-            this.loggerService.customInfo({}, { 'Data obtained from Redis Cache!': dataRedis})
+            this.loggerService.customInfo({}, {'Data Value...': JSON.parse(dataRedis)})
             return JSON.parse(dataRedis);
         } else {
-            this.loggerService.customError({}, {message: 'Data Not Found!'});
+            this.loggerService.customError({}, {message: 'Data Not Found!...'});
             this.loggerService.customError(null, validation);
             return (Error)
         };
