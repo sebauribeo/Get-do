@@ -11,7 +11,7 @@ export class AppController {
 
   @Get(':Pets')
   async getDataRedis(@Param('Pets', ParseIntPipe) Pets: number, @Response() response){
-    const dataRedis: any = await this.redisService.getDataRedis(Pets);
+    const dataRedis: any = await this.redisService.getDataRedis(Pets, response);
       this.loggerService.customInfo({}, { 'Data obtained from Redis Cache!': dataRedis})
       return response.status(HttpStatus.OK).json(dataRedis);
   };
