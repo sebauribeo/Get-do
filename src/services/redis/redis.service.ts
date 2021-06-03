@@ -24,7 +24,7 @@ export class RedisService {
                 statusMessage: 'INTERNAL SERVER ERROR'
             }, HttpStatus.INTERNAL_SERVER_ERROR);
         } else {
-            this.loggerService.customInfo({}, {message: 'Data Obtained...'})
+            this.loggerService.customInfo({}, {message: 'Data Obtained from Redis cache...'})
             return (dataRedis);
         };
     };

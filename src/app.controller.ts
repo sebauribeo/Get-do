@@ -21,8 +21,7 @@ export class AppController {
       const validation = await validate(result);
 
       if (validation.length === 0) {
-        this.loggerService.customInfo({}, { 'Data obtained from Redis Cache!': JSON.parse(dataRedis)})
-        await this.redisService.getDataRedis(validationResult.id.toString())
+        this.loggerService.customInfo({}, { 'Data from Redis Cache!': JSON.parse(dataRedis)})
         this.loggerService.customInfo({}, { message: 'Data Validated is OK...!'})
         return JSON.parse(dataRedis);
       } else {
