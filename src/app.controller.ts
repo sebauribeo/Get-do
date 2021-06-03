@@ -1,4 +1,6 @@
-import { Controller, Get, HttpStatus, Param, ParseIntPipe, Response } from "@nestjs/common";
+import { Controller, Get, HttpException, HttpStatus, Param, ParseIntPipe, Response } from "@nestjs/common";
+import { validate } from "class-validator";
+import { ValidationDTO } from "./dto/validation.dto";
 import { LoggerService } from "./services/logger/logger.service";
 import { RedisService } from "./services/redis/redis.service";
 
@@ -10,9 +12,31 @@ export class AppController {
   ) {}
 
   @Get(':Pets')
-  async getDataRedis(@Param('Pets', ParseIntPipe) Pets: number, @Response() response){
-    const dataRedis: any = await this.redisService.getDataRedis(Pets, response);
-      this.loggerService.customInfo({}, { 'Data obtained from Redis Cache!': dataRedis})
-      return response.status(HttpStatus.OK).json(dataRedis);
+  async getDataRedis(@Param('Pets', ParseIntPipe) Pets: number){
+    
+    try {
+      const dataRedis: any = await this.redisService.getDataRedis(Pets);
+      const validationResult: ValidationDTO = JSON.parse(dataRedis); 
+      const result = new ValidationDTO(validationResult);
+      const validation = await validate(result);
+
+      if (validation.length === 0) {
+        this.loggerService.customInfo({}, { 'Data obtained from Redis Cache!': JSON.parse(dataRedis)})
+        await this.redisService.getDataRedis(validationResult.id.toString())
+        this.loggerService.customInfo({}, { message: 'Data Validated is OK...!'})
+        return JSON.parse(dataRedis);
+      } else {
+        this.loggerService.customError(null, validation);
+        throw new HttpException({
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          statusMessage: 'Data not found!...'
+      }, HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+    } catch (error) {
+      throw new HttpException({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        statusMessage: 'INTERNAL SERVER ERROR'
+      }, HttpStatus.INTERNAL_SERVER_ERROR); 
+    };
   };
 };

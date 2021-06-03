@@ -1,6 +1,4 @@
-import { HttpException, HttpStatus, Injectable, Response } from '@nestjs/common';
-import { validate } from 'class-validator';
-import { ValidationDTO } from 'src/dto/validation.dto';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { LoggerService } from '../logger/logger.service';
 
 
@@ -17,22 +15,17 @@ export class RedisService {
         private readonly loggerService: LoggerService
     ){}
 
-    async getDataRedis(key: any, @Response() response){
+    async getDataRedis(key: any){
         const dataRedis: any = await redisClient.get(key);
-        this.loggerService.customInfo({}, { 'Data from the server...': JSON.parse(dataRedis)});
-        const validationResult: ValidationDTO = dataRedis; 
-        const result = new ValidationDTO(validationResult);
-        const validation = await validate(result);
-        if (dataRedis !== null){
-            this.loggerService.customInfo({}, {message: 'Data Obtained...'})
-            return response.status(HttpStatus.OK),JSON.parse(dataRedis);
-        } else {
-            this.loggerService.customError(null, validation);
+        if (!dataRedis){
             this.loggerService.customError({}, {message: 'Data Not Found!...'});
             throw new HttpException({
                 status: HttpStatus.INTERNAL_SERVER_ERROR,
                 statusMessage: 'INTERNAL SERVER ERROR'
             }, HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            this.loggerService.customInfo({}, {message: 'Data Obtained...'})
+            return (dataRedis);
         };
     };
 };
