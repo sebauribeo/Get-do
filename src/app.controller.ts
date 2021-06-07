@@ -1,4 +1,4 @@
-import { Controller, Get, HttpException, HttpStatus, Param, ParseIntPipe, Response } from "@nestjs/common";
+import { Controller, Get, HttpCode, HttpException, HttpStatus, Param, ParseIntPipe } from "@nestjs/common";
 import { validate } from "class-validator";
 import { ValidationDTO } from "./dto/validation.dto";
 import { LoggerService } from "./services/logger/logger.service";
@@ -12,6 +12,7 @@ export class AppController {
   ) {}
 
   @Get(':Pets')
+  @HttpCode(HttpStatus.OK)
   async getDataRedis(@Param('Pets', ParseIntPipe) Pets: number){
     
     try {
@@ -21,11 +22,11 @@ export class AppController {
       const validation = await validate(result);
 
       if (validation.length === 0) {
-        this.loggerService.customInfo({}, { 'Data from Redis Cache!': JSON.parse(dataRedis)})
-        this.loggerService.customInfo({}, { message: 'Data Validated is OK...!'})
+        this.loggerService.info({}, {'Data from Redis Cache!': JSON.parse(dataRedis)})
+        this.loggerService.info({}, {message: 'Data Validated is OK...!'})
         return JSON.parse(dataRedis);
       } else {
-        this.loggerService.customError(null, validation);
+        this.loggerService.error(null, validation);
         throw new HttpException({
           status: HttpStatus.INTERNAL_SERVER_ERROR,
           statusMessage: 'Data not found!...'
@@ -34,7 +35,7 @@ export class AppController {
     } catch (error) {
       throw new HttpException({
         status: HttpStatus.INTERNAL_SERVER_ERROR,
-        statusMessage: 'INTERNAL SERVER ERROR'
+        statusMessage: 'DATA NOT FOUND!...'
       }, HttpStatus.INTERNAL_SERVER_ERROR); 
     };
   };

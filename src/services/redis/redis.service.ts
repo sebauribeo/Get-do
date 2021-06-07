@@ -18,13 +18,13 @@ export class RedisService {
     async getDataRedis(key: any){
         const dataRedis: any = await redisClient.get(key);
         if (!dataRedis){
-            this.loggerService.customError({}, {message: 'Data Not Found!...'});
+            this.loggerService.error({}, {message: 'Data Not Found!...'});
             throw new HttpException({
                 status: HttpStatus.INTERNAL_SERVER_ERROR,
                 statusMessage: 'INTERNAL SERVER ERROR'
             }, HttpStatus.INTERNAL_SERVER_ERROR);
         } else {
-            this.loggerService.customInfo({}, {message: 'Data Obtained from Redis cache...'})
+            this.loggerService.info({}, {message: 'Data Obtained from Redis cache...'})
             return (dataRedis);
         };
     };
