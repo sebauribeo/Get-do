@@ -21,22 +21,20 @@ export class AppController {
       const result = new ValidationDTO(validationResult);
       const validation = await validate(result);
 
-      if (validation.length === 0) {
-        this.loggerService.info({}, {'Data from Redis Cache!': JSON.parse(dataRedis)})
-        this.loggerService.info({}, {message: 'Data Validated is OK...!'})
-        return JSON.parse(dataRedis);
-      } else {
+      if (!validation) {
         this.loggerService.error(null, validation);
         throw new HttpException({
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          statusMessage: 'Data not found!...'
-      }, HttpStatus.INTERNAL_SERVER_ERROR);
+          status: HttpStatus.BAD_GATEWAY,
+      }, HttpStatus.BAD_GATEWAY);
+    } else {
+        this.loggerService.info({}, {message: 'Data Validated is OK!...'})
+        return JSON.parse(dataRedis);
       }
     } catch (error) {
       throw new HttpException({
-        status: HttpStatus.INTERNAL_SERVER_ERROR,
-        statusMessage: 'DATA NOT FOUND!...'
-      }, HttpStatus.INTERNAL_SERVER_ERROR); 
+        status: HttpStatus.BAD_GATEWAY,
+        statusMessage: 'Data not found!...'
+      }, HttpStatus.BAD_GATEWAY); 
     };
   };
 };

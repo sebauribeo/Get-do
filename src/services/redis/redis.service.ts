@@ -20,11 +20,10 @@ export class RedisService {
         if (!dataRedis){
             this.loggerService.error({}, {message: 'Data Not Found!...'});
             throw new HttpException({
-                status: HttpStatus.INTERNAL_SERVER_ERROR,
-                statusMessage: 'INTERNAL SERVER ERROR'
-            }, HttpStatus.INTERNAL_SERVER_ERROR);
+                status: HttpStatus.BAD_GATEWAY,
+            }, HttpStatus.BAD_GATEWAY);
         } else {
-            this.loggerService.info({}, {message: 'Data Obtained from Redis cache...'})
+            this.loggerService.info({}, {'Data from Redis Cache!...': JSON.parse(dataRedis)})
             return (dataRedis);
         };
     };

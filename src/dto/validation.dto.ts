@@ -33,9 +33,11 @@ export class ValidationDTO{
     @IsString()
     commercialName: string;
 
+    @IsNotEmpty()
     @IsString({each: true})
     photoUrls: Array<string>;
 
+    @IsNotEmpty()
     @IsEnum(["available", "pending", "sold"],{
         message: 'Status is not valid [available, pending, sold]'
     })
