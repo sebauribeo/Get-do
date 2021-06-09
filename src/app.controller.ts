@@ -31,10 +31,10 @@ export class AppController {
         return JSON.parse(dataRedis);
       }
     } catch (error) {
-      throw new HttpException({
-        status: HttpStatus.BAD_GATEWAY,
-        statusMessage: 'Data not found!...'
-      }, HttpStatus.BAD_GATEWAY); 
+        throw new HttpException({
+          status: HttpStatus.BAD_GATEWAY,
+          statusMessage: 'Data is not valid!...'
+      }, HttpStatus.BAD_GATEWAY)
     };
   };
 };

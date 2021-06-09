@@ -1,7 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { LoggerService } from '../logger/logger.service';
 
-
 const asyncRedis = require("async-redis");
 const redisClient = asyncRedis.createClient();
 
@@ -23,7 +22,7 @@ export class RedisService {
                 status: HttpStatus.BAD_GATEWAY,
             }, HttpStatus.BAD_GATEWAY);
         } else {
-            this.loggerService.info({}, {'Data from Redis Cache!...': JSON.parse(dataRedis)})
+            this.loggerService.info({}, {message: 'Data Obtained from Redis cache...'})
             return (dataRedis);
         };
     };
