@@ -1,6 +1,5 @@
 import { Controller, Get, HttpCode, HttpException, HttpStatus, Param, ParseIntPipe } from "@nestjs/common";
 import { validate } from "class-validator";
-import { request } from "https";
 import { ValidationDTO } from "./dto/validation.dto";
 import { LoggerService } from "./services/logger/logger.service";
 import { RedisService } from "./services/redis/redis.service";
@@ -13,7 +12,6 @@ export class AppController {
   ) {}
 
   @Get(':Pets')
-  @HttpCode(HttpStatus.OK)
   async getDataRedis(@Param('Pets', ParseIntPipe) Pets: number){
     
     try {
@@ -36,6 +34,5 @@ export class AppController {
           status: HttpStatus.BAD_GATEWAY,
           statusMessage: 'Data does not exist!...',
       }, HttpStatus.BAD_GATEWAY)
-    };
-  };
+    };  };
 };

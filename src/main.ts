@@ -12,7 +12,6 @@ async function bootstrap() {
   const logger = new Logger();
   const { httpAdapter } = app.get(HttpAdapterHost);
 
-
   const options = new DocumentBuilder()
   .setTitle('Pets example')
   .setDescription('The Pets API description')
@@ -21,6 +20,7 @@ async function bootstrap() {
 
 const document = SwaggerModule.createDocument(app, options);
 SwaggerModule.setup('api', app, document);
+
 app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
 app.useGlobalPipes(new ValidationPipe) 
 await app.listen(port);

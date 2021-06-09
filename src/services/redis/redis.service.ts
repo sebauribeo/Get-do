@@ -14,18 +14,16 @@ export class RedisService {
         private readonly logger: LoggerService
     ){}
 
-    async getDataRedis(key: any){
+    async getDataRedis(key: number){
 
         const dataRedis: any = await redisClient.get(key);
         if (!dataRedis){
             this.logger.error({}, {message: 'Data Not Found!...'});
             throw new HttpException({
-                statusMessage: 'Data not found (redis)'
             }, HttpStatus.BAD_GATEWAY);
         } else {
             this.logger.info({}, {message: 'Data Obtained from Redis cache...'})
             return (dataRedis);
         };
-
     };
 };
