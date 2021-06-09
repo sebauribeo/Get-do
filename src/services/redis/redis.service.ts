@@ -11,19 +11,21 @@ redisClient.on("error", function(error: string){
 @Injectable()
 export class RedisService {
     constructor(
-        private readonly loggerService: LoggerService
+        private readonly logger: LoggerService
     ){}
 
     async getDataRedis(key: any){
+
         const dataRedis: any = await redisClient.get(key);
         if (!dataRedis){
-            this.loggerService.error({}, {message: 'Data Not Found!...'});
+            this.logger.error({}, {message: 'Data Not Found!...'});
             throw new HttpException({
-                status: HttpStatus.BAD_GATEWAY,
+                statusMessage: 'Data not found (redis)'
             }, HttpStatus.BAD_GATEWAY);
         } else {
-            this.loggerService.info({}, {message: 'Data Obtained from Redis cache...'})
+            this.logger.info({}, {message: 'Data Obtained from Redis cache...'})
             return (dataRedis);
         };
+
     };
 };

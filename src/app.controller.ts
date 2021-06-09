@@ -1,5 +1,6 @@
 import { Controller, Get, HttpCode, HttpException, HttpStatus, Param, ParseIntPipe } from "@nestjs/common";
 import { validate } from "class-validator";
+import { request } from "https";
 import { ValidationDTO } from "./dto/validation.dto";
 import { LoggerService } from "./services/logger/logger.service";
 import { RedisService } from "./services/redis/redis.service";
@@ -8,7 +9,7 @@ import { RedisService } from "./services/redis/redis.service";
 export class AppController {
   constructor(
     private redisService: RedisService,
-    private loggerService: LoggerService,
+    private logger: LoggerService,
   ) {}
 
   @Get(':Pets')
@@ -22,18 +23,18 @@ export class AppController {
       const validation = await validate(result);
 
       if (!validation) {
-        this.loggerService.error(null, validation);
+        this.logger.error(null, validation);
         throw new HttpException({
-          status: HttpStatus.BAD_GATEWAY,
+          statusMessage: 'Validate data error!...'
       }, HttpStatus.BAD_GATEWAY);
     } else {
-        this.loggerService.info({}, {message: 'Data Validated is OK!...'})
+        this.logger.info({}, {message: 'Data Validated is OK!...'})
         return JSON.parse(dataRedis);
       }
     } catch (error) {
         throw new HttpException({
           status: HttpStatus.BAD_GATEWAY,
-          statusMessage: 'Data is not valid!...'
+          statusMessage: 'Data does not exist!...',
       }, HttpStatus.BAD_GATEWAY)
     };
   };

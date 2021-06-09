@@ -14,7 +14,7 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
     const request = ctx.getRequest();
 
     const httpException = (exception instanceof HttpException) ? exception.getResponse() : null;
-    const error: Record<string, any> = (httpException) ? exception.response.data || exception.response.message : exception.message || exception;
+    const error: Record<string, any> = (httpException) ? exception.response || exception.response.message : exception.message || exception;
     this.logger.error(request.headers, error);
 
     const status = (exception.response) ? exception.response.status || exception.response.statusCode || exception.status
@@ -28,7 +28,7 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
           statusDescription,
         });
     }
-    statusDescription = (exception.response) ? error : exception.message;
+    statusDescription = exception.response.statusMessage
     url = request.url;
 
     return response.status(status)
